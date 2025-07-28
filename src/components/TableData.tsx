@@ -1,9 +1,13 @@
 import Link from "next/link";
-import RateStair from "./RateStair";
+import RateStair from "./ui/RateStair";
+import { Teacher } from "@/type";
+type TableDataProps = {
+  teachers: Teacher[];
+};
 
-async function TableData() {
+function TableData({ teachers }: TableDataProps) {
   return (
-    <div className="border-primary mt-10 h-full rounded-2xl border-2 shadow-md">
+    <div className="border-primary mt-10 h-full w-full rounded-2xl border-2 shadow-md">
       <table className="divide-primary w-full divide-y">
         <thead className="bg-primary text-left text-white">
           <tr>
@@ -14,18 +18,23 @@ async function TableData() {
           </tr>
         </thead>
         <tbody className="divide-primary text-primary divide-y text-sm">
-          <tr>
-            <td className="px-6 py-4">Juan Pérez</td>
-            <td className="px-6 py-4">Ingeniería Electronica</td>
-            <td className="px-6 py-4">
-              <RateStair></RateStair>
-            </td>
-            <td className="px-6 py-4">
-              <Link href={"/id/view"} className="text-primary hover:underline">
-                Ver
-              </Link>
-            </td>
-          </tr>
+          {teachers.map((teacher) => (
+            <tr key={teacher.id}>
+              <td className="px-6 py-4">{teacher.name}</td>
+              <td className="px-6 py-4">{teacher.career.name}</td>
+              <td className="px-6 py-4">
+                <RateStair rating={teacher.avg}></RateStair>
+              </td>
+              <td className="px-6 py-4">
+                <Link
+                  href={"/" + teacher.id + "/view"}
+                  className="text-primary hover:underline"
+                >
+                  Ver reseñas
+                </Link>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

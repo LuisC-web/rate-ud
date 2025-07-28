@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Itim } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
+import Header from "@/components/ui/Header";
 
 const itim = Itim({
   variable: "--font-itim",

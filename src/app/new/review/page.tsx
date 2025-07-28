@@ -1,7 +1,28 @@
-import RateStair from "@/components/RateStair";
-import React from "react";
+"use client";
+import RateStair from "@/components/ui/RateStair";
+import React, { useEffect, useState } from "react";
+import { getTeachers } from "../../../../actions/get-teacher";
+import { Teacher } from "@/type";
+import { Career } from "@prisma/client";
+import { getCareers } from "../../../../actions/get-career";
 
-function newReviewPage() {
+function NewReviewPage() {
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [careers, setCareers] = useState<Career[]>([]);
+
+  const [loading, setLoading] = useState<boolean>(true);
+  useEffect(() => {
+    const getTeacherMountComponent = async () => {
+      setLoading(true);
+      const dataTeachers = await getTeachers();
+      const dataCareers = await getCareers();
+
+      setTeachers(dataTeachers);
+      setCareers(dataCareers);
+      setLoading(false);
+    };
+    getTeacherMountComponent();
+  }, []);
   return (
     <div className="flex h-full w-screen items-center justify-center">
       <div className="border-primary mx-auto mt-10 w-full max-w-xl rounded-xl border-2 p-5 px-10">
@@ -15,6 +36,9 @@ function newReviewPage() {
               defaultValue=""
             >
               <option value="">Seleccione un profesor</option>
+              {teachers.map((teacher) => (
+                <option key={teacher.id}>{teacher.name}</option>
+              ))}
             </select>
           </div>
           <div className="flex flex-col space-y-2">
@@ -25,6 +49,9 @@ function newReviewPage() {
               defaultValue=""
             >
               <option value="">Seleccione una carrera</option>
+              {careers.map((career) => (
+                <option key={career.id}>{career.name}</option>
+              ))}
             </select>
           </div>
           <div className="flex flex-col space-y-2">
@@ -51,4 +78,4 @@ function newReviewPage() {
   );
 }
 
-export default newReviewPage;
+export default NewReviewPage;
