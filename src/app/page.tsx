@@ -4,18 +4,44 @@ import { Teacher } from "@/type";
 import { Search, SkipBack, SkipForward } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getTeachers } from "../../actions/get-teacher";
-import Spinner from "@/components/ui/spinner/Spinner";
 import CardData from "@/components/CardData";
 import { toast } from "react-toastify";
 const TEACHER_FOR_PAGE = 9;
 export default function Home() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [pages, setPages] = useState({ totalPages: 0, actualPages: 1 });
+  const [pages, setPages] = useState({ totalPages: 1, actualPages: 1 });
+  const [pageMovil, setPageMovil] = useState(1);
+
   useEffect(() => {
     const getTeacherMountComponent = async () => {
       setLoading(true);
       const data = await getTeachers(TEACHER_FOR_PAGE);
+      toast.success("Cargando mas profesores...");
+      if (data.error.error) {
+        toast.error(data.error.message);
+        setTeachers([]);
+        console.log(data);
+        setLoading(false);
+        return;
+      }
+      setTeachers(data.data);
+      setPages({
+        ...pages,
+        totalPages: Math.ceil(data.count / TEACHER_FOR_PAGE),
+      });
+      setLoading(false);
+    };
+    getTeacherMountComponent();
+  }, []);
+  useEffect(() => {
+    const getTeacherChange = async () => {
+      setLoading(true);
+      toast.success("Cargando mas profesores...");
+      const data = await getTeachers(
+        TEACHER_FOR_PAGE,
+        (pages.actualPages - 1) * TEACHER_FOR_PAGE,
+      );
 
       if (data.error.error) {
         toast.error(data.error.message);
@@ -25,12 +51,29 @@ export default function Home() {
         return;
       }
       setTeachers(data.data);
-      setPages({ ...pages, totalPages: data.count / TEACHER_FOR_PAGE });
       setLoading(false);
     };
-    getTeacherMountComponent();
-  }, []);
+    getTeacherChange();
+  }, [pages]);
+  const handleChargeInfiniteScroll = async () => {
+    setLoading(true);
+    toast.success("Cargando mas profesores...");
+    const data = await getTeachers(
+      TEACHER_FOR_PAGE + pageMovil * TEACHER_FOR_PAGE,
+    );
+    console.log(data);
 
+    if (data.error.error) {
+      toast.error(data.error.message);
+      setTeachers([]);
+      console.log(data);
+      setLoading(false);
+      return;
+    }
+    setTeachers(data.data);
+    setPageMovil(pageMovil < TEACHER_FOR_PAGE ? pageMovil + 1 : pageMovil);
+    setLoading(false);
+  };
   return (
     <div className="mt-1 flex h-full flex-col px-10">
       <h1 className="text-primary text-4xl">Busca a tu profe...</h1>
@@ -45,20 +88,27 @@ export default function Home() {
         </div>
       </form>
       <div className="flex h-full flex-col items-center justify-between pb-5">
-        {loading ? (
-          <Spinner />
-        ) : teachers.length > 0 ? (
+        {teachers.length > 0 ? (
           <>
             <TableData teachers={teachers} />
             <CardData teachers={teachers}></CardData>
             <div className="mt-2 hidden w-full items-center justify-center gap-2 md:flex">
-              <SkipBack className="hover:text-primary/80 cursor-pointer" />
+              <SkipBack
+                className="hover:text-primary/80 cursor-pointer"
+                onClick={() =>
+                  setPages({
+                    ...pages,
+                    actualPages:
+                      pages.actualPages > 1 ? pages.actualPages - 1 : 1,
+                  })
+                }
+              />
               <div className="flex gap-2">
                 {Array.from({ length: pages.totalPages }, (_, i) => i + 1).map(
                   (num) => (
                     <div
                       key={num}
-                      className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white"
+                      className={`bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white ${num === pages.actualPages ? "bg-primary/80" : "bg-primary"}`}
                       onClick={() => {
                         setPages({ ...pages, actualPages: num });
                       }}
@@ -68,10 +118,27 @@ export default function Home() {
                   ),
                 )}
               </div>
-              <SkipForward className="hover:text-primary/80 cursor-pointer" />
+              <SkipForward
+                className="hover:text-primary/80 cursor-pointer"
+                onClick={() =>
+                  setPages({
+                    ...pages,
+                    actualPages:
+                      pages.actualPages < pages.totalPages
+                        ? pages.actualPages + 1
+                        : pages.totalPages,
+                  })
+                }
+              />
             </div>
-            <button className="bg-primary-light text-primary border-primary active:bg-primary-light/80 mt-5 block w-full cursor-pointer rounded-xl border-2 p-2 md:hidden">
-              Cargar mas
+            <button
+              className="bg-primary-light text-primary border-primary active:bg-primary-light/80 mt-5 block w-full cursor-pointer rounded-xl border-2 p-2 disabled:opacity-20 md:hidden"
+              onClick={handleChargeInfiniteScroll}
+              disabled={loading || pageMovil >= pages.totalPages}
+            >
+              {pageMovil === pages.totalPages
+                ? "NO HAY MAS DATOS"
+                : "Cargar mas"}
             </button>
           </>
         ) : (

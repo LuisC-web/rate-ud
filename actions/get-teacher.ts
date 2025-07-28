@@ -1,10 +1,13 @@
 "use server";
 import { prisma } from "@/lib/prisma";
-export const getTeachers = async (limit?: number) => {
+export const getTeachers = async (limit?: number, skip?: number) => {
   try {
+    console.log(skip);
+
     const teachers = await prisma.teacher.findMany({
       include: { score: true, career: true },
       ...(limit ? { take: limit } : {}),
+      skip,
     });
     const countTeachers = await prisma.teacher.count();
     return {
