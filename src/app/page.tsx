@@ -1,12 +1,24 @@
+"use client";
 import TableData from "@/components/TableData";
-import { prisma } from "@/lib/prisma";
+import { teacher } from "@/type";
 import { Search, SkipBack, SkipForward } from "lucide-react";
-const getTeachers = async () => {
-  return await prisma.teacher.findMany();
-};
-export default async function Home() {
-  const teachers = await getTeachers();
-  console.log(teachers);
+import { useEffect, useState } from "react";
+import { getTeachers } from "../../actions/get-teacher";
+import Spinner from "@/components/ui/spinner/Spinner";
+
+export default function Home() {
+  const [teachers, setTeachers] = useState<teacher[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const getTeacherMountComponent = async () => {
+      setLoading(true);
+      const data = await getTeachers();
+      setTeachers(data);
+      setLoading(false);
+    };
+    getTeacherMountComponent();
+  }, []);
 
   return (
     <div className="mt-1 flex h-full flex-col px-10">
@@ -21,25 +33,23 @@ export default async function Home() {
           />
         </div>
       </form>
-      <div className="flex h-full flex-col justify-between pb-5">
-        {teachers.length ? (
+      <div className="flex h-full flex-col items-center justify-between pb-5">
+        {loading ? (
+          <Spinner />
+        ) : teachers.length > 0 ? (
           <>
-            <TableData></TableData>
+            <TableData teachers={teachers} />
             <div className="mt-2 flex w-full items-center justify-center gap-2">
               <SkipBack className="hover:text-primary/80 cursor-pointer" />
               <div className="flex gap-2">
-                <div className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white">
-                  1
-                </div>
-                <div className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white">
-                  2
-                </div>
-                <div className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white">
-                  3
-                </div>
-                <div className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white">
-                  4
-                </div>
+                {[1, 2, 3, 4].map((num) => (
+                  <div
+                    key={num}
+                    className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white"
+                  >
+                    {num}
+                  </div>
+                ))}
               </div>
               <SkipForward className="hover:text-primary/80 cursor-pointer" />
             </div>
