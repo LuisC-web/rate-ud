@@ -1,8 +1,8 @@
 import Link from "next/link";
 import RateStair from "./ui/RateStair";
-import { teacher } from "@/type";
+import { Teacher } from "@/type";
 type TableDataProps = {
-  teachers: teacher[];
+  teachers: Teacher[];
 };
 
 function TableData({ teachers }: TableDataProps) {
@@ -30,7 +30,7 @@ function TableData({ teachers }: TableDataProps) {
                   href={"/" + teacher.id + "/view"}
                   className="text-primary hover:underline"
                 >
-                  Ver
+                  Ver reseñas
                 </Link>
               </td>
             </tr>

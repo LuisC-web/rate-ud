@@ -1,19 +1,18 @@
 "use client";
 import TableData from "@/components/TableData";
-import { teacher } from "@/type";
+import { Teacher } from "@/type";
 import { Search, SkipBack, SkipForward } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getTeachers } from "../../actions/get-teacher";
 import Spinner from "@/components/ui/spinner/Spinner";
 
 export default function Home() {
-  const [teachers, setTeachers] = useState<teacher[]>([]);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
   useEffect(() => {
     const getTeacherMountComponent = async () => {
       setLoading(true);
-      const data = await getTeachers();
+      const data = await getTeachers(9);
       setTeachers(data);
       setLoading(false);
     };
