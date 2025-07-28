@@ -8,7 +8,7 @@ async function TableData() {
         <thead className="bg-primary text-left text-white">
           <tr>
             <th className="px-6 py-3 font-medium">Nombre</th>
-            <th className="px-6 py-3 font-medium">Facultad</th>
+            <th className="px-6 py-3 font-medium">Carrera</th>
             <th className="px-6 py-3 font-medium">Calificación</th>
             <th className="px-6 py-3 font-medium">Acciones</th>
           </tr>
@@ -16,7 +16,7 @@ async function TableData() {
         <tbody className="divide-primary text-primary divide-y text-sm">
           <tr>
             <td className="px-6 py-4">Juan Pérez</td>
-            <td className="px-6 py-4">Ingeniería</td>
+            <td className="px-6 py-4">Ingeniería Electronica</td>
             <td className="px-6 py-4">
               <RateStair></RateStair>
             </td>

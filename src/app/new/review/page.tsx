@@ -18,9 +18,19 @@ function newReviewPage() {
             </select>
           </div>
           <div className="flex flex-col space-y-2">
+            <label htmlFor="select-career">Seleccione una carrera:</label>
+            <select
+              name="select-career"
+              className="bg-primary-light border-primary w-full rounded-2xl border-2 px-5 py-2"
+              defaultValue=""
+            >
+              <option value="">Seleccione una carrera</option>
+            </select>
+          </div>
+          <div className="flex flex-col space-y-2">
             <label htmlFor="rate-teacher">Calificacion:</label>
             <RateStair></RateStair>
-          </div>{" "}
+          </div>
           <div className="flex flex-col space-y-2">
             <label htmlFor="review-teacher">Reseña:</label>
             <textarea
