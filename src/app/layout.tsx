@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Itim } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
 
 const itim = Itim({
   variable: "--font-itim",
@@ -20,7 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${itim.variable} font-sans antialiased`}>
+      <body
+        className={`${itim.variable} font-sans antialiased min-h-screen h-full md:h-screen w-screen`}
+      >
+        <Header></Header>
         {children}
       </body>
     </html>
