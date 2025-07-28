@@ -6,15 +6,26 @@ import { useEffect, useState } from "react";
 import { getTeachers } from "../../actions/get-teacher";
 import Spinner from "@/components/ui/spinner/Spinner";
 import CardData from "@/components/CardData";
-
+import { toast } from "react-toastify";
+const TEACHER_FOR_PAGE = 9;
 export default function Home() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [pages, setPages] = useState({ totalPages: 0, actualPages: 1 });
   useEffect(() => {
     const getTeacherMountComponent = async () => {
       setLoading(true);
-      const data = await getTeachers(9);
-      setTeachers(data);
+      const data = await getTeachers(TEACHER_FOR_PAGE);
+
+      if (data.error.error) {
+        toast.error(data.error.message);
+        setTeachers([]);
+        console.log(data);
+        setLoading(false);
+        return;
+      }
+      setTeachers(data.data);
+      setPages({ ...pages, totalPages: data.count / TEACHER_FOR_PAGE });
       setLoading(false);
     };
     getTeacherMountComponent();
@@ -43,14 +54,19 @@ export default function Home() {
             <div className="mt-2 hidden w-full items-center justify-center gap-2 md:flex">
               <SkipBack className="hover:text-primary/80 cursor-pointer" />
               <div className="flex gap-2">
-                {[1, 2, 3, 4].map((num) => (
-                  <div
-                    key={num}
-                    className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white"
-                  >
-                    {num}
-                  </div>
-                ))}
+                {Array.from({ length: pages.totalPages }, (_, i) => i + 1).map(
+                  (num) => (
+                    <div
+                      key={num}
+                      className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white"
+                      onClick={() => {
+                        setPages({ ...pages, actualPages: num });
+                      }}
+                    >
+                      {num}
+                    </div>
+                  ),
+                )}
               </div>
               <SkipForward className="hover:text-primary/80 cursor-pointer" />
             </div>
