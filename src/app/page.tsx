@@ -5,6 +5,7 @@ import { Search, SkipBack, SkipForward } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getTeachers } from "../../actions/get-teacher";
 import Spinner from "@/components/ui/spinner/Spinner";
+import CardData from "@/components/CardData";
 
 export default function Home() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -38,7 +39,8 @@ export default function Home() {
         ) : teachers.length > 0 ? (
           <>
             <TableData teachers={teachers} />
-            <div className="mt-2 flex w-full items-center justify-center gap-2">
+            <CardData teachers={teachers}></CardData>
+            <div className="mt-2 hidden w-full items-center justify-center gap-2 md:flex">
               <SkipBack className="hover:text-primary/80 cursor-pointer" />
               <div className="flex gap-2">
                 {[1, 2, 3, 4].map((num) => (
@@ -52,6 +54,9 @@ export default function Home() {
               </div>
               <SkipForward className="hover:text-primary/80 cursor-pointer" />
             </div>
+            <button className="bg-primary-light text-primary border-primary active:bg-primary-light/80 mt-5 block w-full cursor-pointer rounded-xl border-2 p-2 md:hidden">
+              Cargar mas
+            </button>
           </>
         ) : (
           <p className="text-error mt-4 text-3xl">No hay resultados</p>
