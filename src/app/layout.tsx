@@ -16,16 +16,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${itim.variable} font-sans antialiased min-h-screen h-full md:h-screen w-screen`}
-      >
-        <Header></Header>
-        {children}
+    <html lang="es" className={`${itim.variable} font-sans`}>
+      <body className="min-h-screen h-screen flex flex-col bg-white text-gray-900 antialiased">
+        <Header />
+        <main className="flex-grow flex flex-col  ">{children}</main>
       </body>
     </html>
   );
