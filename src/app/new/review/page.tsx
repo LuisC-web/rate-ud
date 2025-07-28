@@ -27,7 +27,7 @@ function newReviewPage() {
               name="review-teacher"
               id="review-teacher"
               placeholder="Escribe una reseña..."
-              className="placeholder-primary-light border-primary h-40 rounded-xl border-2 p-7 md:h-64"
+              className="placeholder-primary-light border-primary h-40 resize-none overflow-y-auto rounded-xl border-2 p-7 focus:outline-0 md:h-64"
             ></textarea>
           </div>
           <input
