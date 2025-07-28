@@ -1,15 +1,31 @@
 "use server";
 import { prisma } from "@/lib/prisma";
-export const getTeachers = async (limit?: number, skip?: number) => {
-  try {
-    console.log(skip);
 
+export const getTeachers = async (
+  search?: string,
+  limit?: number,
+  skip?: number,
+) => {
+  try {
     const teachers = await prisma.teacher.findMany({
+      where: search
+        ? {
+            OR: [{ name: { contains: search, mode: "insensitive" } }],
+          }
+        : undefined,
       include: { score: true, career: true },
       ...(limit ? { take: limit } : {}),
-      skip,
+      ...(skip ? { skip } : {}),
     });
-    const countTeachers = await prisma.teacher.count();
+
+    const countTeachers = await prisma.teacher.count({
+      where: search
+        ? {
+            OR: [{ name: { contains: search, mode: "insensitive" } }],
+          }
+        : undefined,
+    });
+
     return {
       data: teachers,
       count: countTeachers,
@@ -20,7 +36,7 @@ export const getTeachers = async (limit?: number, skip?: number) => {
     return {
       data: [],
       count: 0,
-      error: { error: true, message: "Ocurrio un error" },
+      error: { error: true, message: "Ocurrió un error" },
     };
   }
 };

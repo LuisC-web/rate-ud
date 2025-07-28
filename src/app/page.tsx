@@ -12,11 +12,11 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(true);
   const [pages, setPages] = useState({ totalPages: 1, actualPages: 1 });
   const [pageMovil, setPageMovil] = useState(1);
-
+  const [search, setSearch] = useState("");
   useEffect(() => {
     const getTeacherMountComponent = async () => {
       setLoading(true);
-      const data = await getTeachers(TEACHER_FOR_PAGE);
+      const data = await getTeachers(search, TEACHER_FOR_PAGE);
       toast.success("Cargando mas profesores...");
       if (data.error.error) {
         toast.error(data.error.message);
@@ -39,6 +39,7 @@ export default function Home() {
       setLoading(true);
       toast.success("Cargando mas profesores...");
       const data = await getTeachers(
+        search,
         TEACHER_FOR_PAGE,
         (pages.actualPages - 1) * TEACHER_FOR_PAGE,
       );
@@ -55,13 +56,38 @@ export default function Home() {
     };
     getTeacherChange();
   }, [pages]);
+  useEffect(() => {
+    const getTeacherChange = async () => {
+      setLoading(true);
+      const data = await getTeachers(
+        search,
+        TEACHER_FOR_PAGE,
+        (pages.actualPages - 1) * TEACHER_FOR_PAGE,
+      );
+      if (data.error.error) {
+        toast.error(data.error.message);
+        setTeachers([]);
+        console.log(data);
+        setLoading(false);
+        return;
+      }
+      setPages({
+        ...pages,
+        totalPages: Math.ceil(data.count / TEACHER_FOR_PAGE),
+      });
+      setTeachers(data.data);
+      setLoading(false);
+    };
+    getTeacherChange();
+  }, [search]);
   const handleChargeInfiniteScroll = async () => {
     setLoading(true);
     toast.success("Cargando mas profesores...");
     const data = await getTeachers(
+      search,
+      TEACHER_FOR_PAGE,
       TEACHER_FOR_PAGE + pageMovil * TEACHER_FOR_PAGE,
     );
-    console.log(data);
 
     if (data.error.error) {
       toast.error(data.error.message);
@@ -84,6 +110,7 @@ export default function Home() {
             type="text"
             placeholder="Herrera"
             className="w-full focus:border-0 focus:outline-none"
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </form>
