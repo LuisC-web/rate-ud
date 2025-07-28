@@ -25,30 +25,40 @@ const seed = async () => {
         });
       }),
     );
+    const teacherScoresMap: Record<string, number[]> = {};
     await Promise.all(
       scores.map((score) => {
         const randomTeacher =
           createdTeachers[Math.floor(Math.random() * createdTeachers.length)];
+        if (!teacherScoresMap[randomTeacher.id]) {
+          teacherScoresMap[randomTeacher.id] = [];
+        }
+        teacherScoresMap[randomTeacher.id].push(score.value);
         return prisma.score.create({
           data: {
-            ...score,
+            value: score.value,
             teacherId: randomTeacher.id,
           },
         });
       }),
     );
+    await Promise.all(
+      Object.entries(teacherScoresMap).map(([teacherId, values]) => {
+        const avg =
+          values.reduce((sum, value) => sum + value, 0) / values.length;
+        return prisma.teacher.update({
+          where: { id: +teacherId },
+          data: { avg },
+        });
+      }),
+    );
+
+    console.log("✅ Seeding completed successfully");
   } catch (error) {
-    console.error("Error during seeding:", error);
+    console.error("❌ Error during seeding:", error);
+  } finally {
+    await prisma.$disconnect();
   }
 };
 
-seed()
-  .then(async () => {
-    console.log("✅ Seeding completed successfully");
-    await prisma.$disconnect();
-  })
-  .catch(async (error) => {
-    console.error("❌ Error during seeding:", error);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+seed();

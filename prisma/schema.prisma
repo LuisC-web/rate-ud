@@ -11,6 +11,7 @@ model Teacher {
   name String
   score Score[]
   careerId Int 
+  avg Float @default(0)
   career Career @relation(fields: [careerId], references: [id])
 }
 model Career {

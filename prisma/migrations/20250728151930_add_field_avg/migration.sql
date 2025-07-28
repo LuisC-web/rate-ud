@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Teacher" ADD COLUMN     "avg" DOUBLE PRECISION NOT NULL DEFAULT 0;
