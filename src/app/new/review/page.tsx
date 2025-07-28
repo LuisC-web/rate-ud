@@ -1,4 +1,4 @@
-import RateStair from "@/components/RateStair";
+import RateStair from "@/components/ui/RateStair";
 import React from "react";
 
 function newReviewPage() {
