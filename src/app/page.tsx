@@ -37,7 +37,6 @@ export default function Home() {
   useEffect(() => {
     const getTeacherChange = async () => {
       setLoading(true);
-      toast.success("Cargando mas profesores...");
       const data = await getTeachers(
         search,
         TEACHER_FOR_PAGE,
