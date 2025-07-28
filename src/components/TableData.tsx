@@ -1,0 +1,35 @@
+import Link from "next/link";
+import RateStair from "./RateStair";
+
+async function TableData() {
+  return (
+    <div className="h-full rounded-2xl border-2 border-primary shadow-md mt-10">
+      <table className="w-full divide-y divide-primary">
+        <thead className="bg-primary text-left text-white">
+          <tr>
+            <th className="px-6 py-3 font-medium">Nombre</th>
+            <th className="px-6 py-3 font-medium">Facultad</th>
+            <th className="px-6 py-3 font-medium">Calificación</th>
+            <th className="px-6 py-3 font-medium">Acciones</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-primary  text-sm text-primary">
+          <tr>
+            <td className="px-6 py-4">Juan Pérez</td>
+            <td className="px-6 py-4">Ingeniería</td>
+            <td className="px-6 py-4">
+              <RateStair></RateStair>
+            </td>
+            <td className="px-6 py-4">
+              <Link href={"/id/view"} className="text-primary hover:underline">
+                Ver
+              </Link>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default TableData;
