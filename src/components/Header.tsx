@@ -3,7 +3,7 @@ import React from "react";
 
 function Header() {
   return (
-    <nav className="w-screen px-10 py-6 bg-primary flex justify-between text-xl text-secondary">
+    <nav className="bg-primary text-secondary flex w-screen justify-between px-10 py-6 text-xl">
       <div className="flex gap-3">
         <Link href={"/"}>Busca un profe</Link>
         <Link href={"/new/teacher"}>Crea un profe</Link>

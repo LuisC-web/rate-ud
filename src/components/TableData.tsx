@@ -3,8 +3,8 @@ import RateStair from "./RateStair";
 
 async function TableData() {
   return (
-    <div className="h-full rounded-2xl border-2 border-primary shadow-md mt-10">
-      <table className="w-full divide-y divide-primary">
+    <div className="border-primary mt-10 h-full rounded-2xl border-2 shadow-md">
+      <table className="divide-primary w-full divide-y">
         <thead className="bg-primary text-left text-white">
           <tr>
             <th className="px-6 py-3 font-medium">Nombre</th>
@@ -13,7 +13,7 @@ async function TableData() {
             <th className="px-6 py-3 font-medium">Acciones</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-primary  text-sm text-primary">
+        <tbody className="divide-primary text-primary divide-y text-sm">
           <tr>
             <td className="px-6 py-4">Juan Pérez</td>
             <td className="px-6 py-4">Ingeniería</td>

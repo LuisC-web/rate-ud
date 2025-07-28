@@ -4,43 +4,43 @@ import { Search, SkipBack, SkipForward } from "lucide-react";
 export default async function Home() {
   const teachers = [2];
   return (
-    <div className="flex flex-col h-full px-10  mt-1 ">
-      <h1 className="text-4xl text-primary">Busca a tu profe...</h1>
+    <div className="mt-1 flex h-full flex-col px-10">
+      <h1 className="text-primary text-4xl">Busca a tu profe...</h1>
       <form action="">
-        <div className="border border-primary max-w-3xl rounded-2xl px-4 py-2 flex gap-3 items-center mt-5">
+        <div className="border-primary mt-5 flex max-w-3xl items-center gap-3 rounded-2xl border px-4 py-2">
           <Search className="text-primary size-5" />
           <input
             type="text"
             placeholder="Herrera"
-            className="focus:outline-none focus:border-0 w-full"
+            className="w-full focus:border-0 focus:outline-none"
           />
         </div>
       </form>
-      <div className="pb-5 flex flex-col justify-between h-full">
+      <div className="flex h-full flex-col justify-between pb-5">
         {teachers.length ? (
           <>
             <TableData></TableData>
-            <div className="flex w-full justify-center items-center mt-2 gap-2">
-              <SkipBack className="cursor-pointer hover:text-primary/80" />
-              <div className="gap-2 flex">
-                <div className="bg-primary p-2 text-sm hover:bg-primary/80 cursor-pointer rounded text-white">
+            <div className="mt-2 flex w-full items-center justify-center gap-2">
+              <SkipBack className="hover:text-primary/80 cursor-pointer" />
+              <div className="flex gap-2">
+                <div className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white">
                   1
                 </div>
-                <div className="bg-primary p-2 text-sm hover:bg-primary/80 cursor-pointer rounded text-white">
+                <div className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white">
                   2
                 </div>
-                <div className="bg-primary p-2 text-sm hover:bg-primary/80 cursor-pointer rounded text-white">
+                <div className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white">
                   3
                 </div>
-                <div className="bg-primary p-2 text-sm hover:bg-primary/80 cursor-pointer rounded text-white">
+                <div className="bg-primary hover:bg-primary/80 cursor-pointer rounded p-2 text-sm text-white">
                   4
                 </div>
               </div>
-              <SkipForward className="cursor-pointer hover:text-primary/80" />
+              <SkipForward className="hover:text-primary/80 cursor-pointer" />
             </div>
           </>
         ) : (
-          <p className="text-error text-3xl mt-4">No hay resultados</p>
+          <p className="text-error mt-4 text-3xl">No hay resultados</p>
         )}
       </div>
     </div>

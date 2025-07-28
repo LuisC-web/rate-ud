@@ -10,7 +10,7 @@ function RateStair({ rating = 0 }) {
       {Array.from({ length: fullStars }, (_, i) => (
         <svg
           key={`full-${i}`}
-          className="w-4 h-4 ms-1 text-yellow-300"
+          className="ms-1 h-4 w-4 text-yellow-300"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -24,7 +24,7 @@ function RateStair({ rating = 0 }) {
       {hasHalf && (
         <svg
           key="half"
-          className="w-4 h-4 ms-1 text-yellow-300"
+          className="ms-1 h-4 w-4 text-yellow-300"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="url(#half-star-gradient)"
@@ -50,7 +50,7 @@ function RateStair({ rating = 0 }) {
       {Array.from({ length: emptyStars }, (_, i) => (
         <svg
           key={`empty-${i}`}
-          className="w-4 h-4 ms-1 text-primary"
+          className="text-primary ms-1 h-4 w-4"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"

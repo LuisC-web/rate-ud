@@ -19,9 +19,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es" className={`${itim.variable} font-sans`}>
-      <body className="min-h-screen h-screen flex flex-col bg-white text-gray-900 antialiased">
+      <body className="flex h-screen min-h-screen flex-col bg-white text-gray-900 antialiased">
         <Header />
-        <main className="flex-grow flex flex-col  ">{children}</main>
+        <main className="flex flex-grow flex-col">{children}</main>
       </body>
     </html>
   );
