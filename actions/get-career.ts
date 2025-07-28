@@ -2,5 +2,16 @@
 import { prisma } from "@/lib/prisma";
 
 export const getCareers = async () => {
-  return await prisma.career.findMany();
+  try {
+    return {
+      data: await prisma.career.findMany(),
+      error: { error: false, message: "" },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      data: [],
+      error: { error: true, message: "Ocurrio un error" },
+    };
+  }
 };
