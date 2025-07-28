@@ -24,7 +24,7 @@ function NewReviewPage() {
     getTeacherMountComponent();
   }, []);
   return (
-    <div className="flex h-full w-screen items-center justify-center">
+    <div className="flex h-full items-center justify-center px-5 md:w-screen">
       <div className="border-primary mx-auto mt-10 w-full max-w-xl rounded-xl border-2 p-5 px-10">
         <h1 className="mb-3 text-2xl">Crea una reseña</h1>
         <form className="flex flex-col space-y-3">

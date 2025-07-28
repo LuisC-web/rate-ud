@@ -7,7 +7,7 @@ type TableDataProps = {
 
 function TableData({ teachers }: TableDataProps) {
   return (
-    <div className="border-primary mt-10 h-full w-full rounded-2xl border-2 shadow-md">
+    <div className="border-primary mt-10 hidden h-full w-full rounded-2xl border-2 shadow-md md:table">
       <table className="divide-primary w-full divide-y">
         <thead className="bg-primary text-left text-white">
           <tr>
