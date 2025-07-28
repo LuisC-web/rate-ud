@@ -1,8 +1,13 @@
 import TableData from "@/components/TableData";
+import { prisma } from "@/lib/prisma";
 import { Search, SkipBack, SkipForward } from "lucide-react";
-
+const getTeachers = async () => {
+  return await prisma.teacher.findMany();
+};
 export default async function Home() {
-  const teachers = [2];
+  const teachers = await getTeachers();
+  console.log(teachers);
+
   return (
     <div className="mt-1 flex h-full flex-col px-10">
       <h1 className="text-primary text-4xl">Busca a tu profe...</h1>

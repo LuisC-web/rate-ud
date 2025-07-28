@@ -10,8 +10,8 @@ model Teacher {
   id Int @id @default(autoincrement())
   name String
   score Score[]
-  carreraId Int @unique
-  career Career @relation(fields: [carreraId], references: [id])
+  careerId Int 
+  career Career @relation(fields: [careerId], references: [id])
 }
 model Career {
   id Int @id @default(autoincrement())
@@ -20,7 +20,7 @@ model Career {
 }
 model Score {
   id Int @id @default(autoincrement())
-  name String
-  profesorId Int @unique
-  teacher Teacher @relation(fields: [profesorId], references: [id])
+  value Int
+  teacherId Int 
+  teacher Teacher @relation(fields: [teacherId], references: [id])
 }
