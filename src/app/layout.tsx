@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Itim } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
 
 const itim = Itim({
   variable: "--font-itim",
@@ -15,13 +16,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className={`${itim.variable} font-sans antialiased`}>
-        {children}
+    <html lang="es" className={`${itim.variable} font-sans`}>
+      <body className="flex h-screen min-h-screen flex-col bg-white text-gray-900 antialiased">
+        <Header />
+        <main className="flex flex-grow flex-col">{children}</main>
       </body>
     </html>
   );
