@@ -20,7 +20,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es" className={`${itim.variable} font-sans`}>
-      <body className="flex h-screen min-h-screen flex-col bg-white text-gray-900 antialiased">
+      <body className="flex h-screen min-h-screen flex-col overflow-x-hidden bg-white text-gray-900 antialiased">
         <Header />
         <main className="flex flex-grow flex-col">{children}</main>
         <ToastCustomizable></ToastCustomizable>
