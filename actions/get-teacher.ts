@@ -7,10 +7,31 @@ export const getTeachers = async (
   skip?: number,
 ) => {
   try {
+    const normalizedSearch = search
+      ? search
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+      : undefined;
+
     const teachers = await prisma.teacher.findMany({
-      where: search
+      where: normalizedSearch
         ? {
-            OR: [{ name: { contains: search, mode: "insensitive" } }],
+            OR: [
+              {
+                name: {
+                  contains: normalizedSearch,
+                  mode: "insensitive",
+                },
+              },
+              // Use raw SQL for accent-insensitive search
+              {
+                name: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+            ],
           }
         : undefined,
       include: { reviews: true, career: true },
@@ -19,9 +40,22 @@ export const getTeachers = async (
     });
 
     const countTeachers = await prisma.teacher.count({
-      where: search
+      where: normalizedSearch
         ? {
-            OR: [{ name: { contains: search, mode: "insensitive" } }],
+            OR: [
+              {
+                name: {
+                  contains: normalizedSearch,
+                  mode: "insensitive",
+                },
+              },
+              {
+                name: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+            ],
           }
         : undefined,
     });
