@@ -63,6 +63,18 @@ export default function Home() {
     [],
   );
 
+  // Handle form submission (when Enter is pressed)
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault(); // Prevent page reload
+      setPages((prev) => ({ ...prev, actualPages: 1 })); // Reset to page 1
+      setPageMovil(1); // Reset mobile page counter
+      fetchTeachers(search, TEACHER_FOR_PAGE, 0, false, false); // Execute search
+      toast.info("Buscando profes");
+    },
+    [search, fetchTeachers],
+  );
+
   // Initial load effect - runs only once on component mount
   useEffect(() => {
     fetchTeachers(search, TEACHER_FOR_PAGE, 0, false, true); // Show toast on initial load
@@ -143,7 +155,7 @@ export default function Home() {
   return (
     <div className="mt-1 flex h-full flex-col px-10">
       <h1 className="text-primary text-4xl">Busca a tu profe...</h1>
-      <form action="">
+      <form onSubmit={handleSubmit}>
         <div className="border-primary mt-5 flex max-w-3xl items-center gap-3 rounded-2xl border px-4 py-2">
           <Search className="text-primary size-5" />
           {/* Controlled input to prevent uncontrolled re-renders */}
