@@ -10,7 +10,7 @@ function Header() {
   const [showMenu, setShowModal] = useState(false);
   return (
     <nav className="bg-primary text-secondary flex w-screen items-center justify-center py-6 text-xl transition-all md:px-10">
-      <div className="hidden w-full justify-between md:flex">
+      <div className="hidden w-full justify-end space-x-5 md:flex">
         <Link
           href="/"
           className={`hover:text-primary-light cursor-pointer ${
@@ -19,15 +19,6 @@ function Header() {
         >
           Busca un profe
         </Link>
-        <Link
-          href="/new/teacher"
-          className={`hover:text-primary-light cursor-pointer ${
-            pathname === "/new/teacher" ? "text-primary-light" : ""
-          }`}
-        >
-          Crea un profe
-        </Link>
-
         <Link
           href="/new/review"
           className={`hover:text-primary-light cursor-pointer ${
@@ -62,15 +53,6 @@ function Header() {
           onClick={() => setShowModal(false)}
         >
           Busca un profe
-        </Link>
-        <Link
-          href="/new/teacher"
-          className={`hover:text-primary-light cursor-pointer ${
-            pathname === "/new/teacher" ? "text-primary-light" : ""
-          }`}
-          onClick={() => setShowModal(false)}
-        >
-          Crea un profe
         </Link>
         <Link
           href="/new/review"
