@@ -26,9 +26,11 @@ model Review {
   id        Int      @id @default(autoincrement())
   content    String
   user      String
+  email String
   teacherId Int
   teacher   Teacher  @relation(fields: [teacherId], references: [id])
   score     Score?
+   @@unique([email, teacherId]) 
 }
 
 model Score {

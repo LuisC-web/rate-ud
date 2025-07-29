@@ -8,73 +8,73 @@ const prisma = new PrismaClient();
 
 const seed = async () => {
   try {
-    // Limpieza en orden inverso
+    // Clean up in reverse order to avoid FK conflicts
     await prisma.score.deleteMany();
     await prisma.review.deleteMany();
     await prisma.teacher.deleteMany();
     await prisma.career.deleteMany();
 
-    // Crear carreras
-    const createdCareers = await Promise.all(
+    // Insert careers
+    const createdCareers = await prisma.$transaction(
       careers.map((career) => prisma.career.create({ data: career })),
     );
 
-    // Crear profesores
-    const createdTeachers = await Promise.all(
+    // Insert teachers
+    const createdTeachers = await prisma.$transaction(
       teachers.map((teacher) => {
         const randomCareer =
           createdCareers[Math.floor(Math.random() * createdCareers.length)];
         return prisma.teacher.create({
-          data: {
-            ...teacher,
-            careerId: randomCareer.id,
-          },
+          data: { name: teacher.name, careerId: randomCareer.id },
         });
       }),
     );
 
-    // Crear reviews (asignadas a profesores)
-    const createdReviews = await Promise.all(
-      Array.from({ length: scores.length }).map(() => {
-        const randomTeacher =
-          createdTeachers[Math.floor(Math.random() * createdTeachers.length)];
-        const randomReview =
-          reviews[Math.floor(Math.random() * reviews.length)];
+    // Insert reviews with unique email-teacher combinations
+    const createdReviews = await prisma.$transaction(
+      Array.from({ length: scores.length }).map((_, i) => {
+        const review = reviews[i % reviews.length];
+        const teacherId = createdTeachers[i % createdTeachers.length].id;
 
         return prisma.review.create({
           data: {
-            content: randomReview.content,
-            user: randomReview.user,
-            teacherId: randomTeacher.id,
+            content: review.content,
+            user: `${review.user} ${Math.floor(i / reviews.length) + 1}`, // Make user unique
+            email: `${review.email.split("@")[0]}_${i}@${review.email.split("@")[1]}`, // Make email unique
+            teacherId: teacherId,
           },
         });
       }),
     );
 
-    // Crear scores (asociados a reviews)
+    // Initialize teacherScoresMap properly
     const teacherScoresMap: Record<number, number[]> = {};
-    await Promise.all(
-      createdReviews.map((review, index) => {
-        const scoreValue = scores[index % scores.length].value;
-        if (!teacherScoresMap[review.teacherId]) {
-          teacherScoresMap[review.teacherId] = [];
-        }
-        teacherScoresMap[review.teacherId].push(scoreValue);
+    createdReviews.forEach((review) => {
+      if (!teacherScoresMap[review.teacherId]) {
+        teacherScoresMap[review.teacherId] = [];
+      }
+    });
+
+    // Insert scores
+    await prisma.$transaction(
+      createdReviews.map((review, i) => {
+        const value = scores[i % scores.length].value;
+
+        teacherScoresMap[review.teacherId].push(value);
 
         return prisma.score.create({
           data: {
-            value: scoreValue,
+            value,
             reviewId: review.id,
           },
         });
       }),
     );
 
-    // Calcular promedio por profesor
-    await Promise.all(
+    // Update teacher average scores
+    await prisma.$transaction(
       Object.entries(teacherScoresMap).map(([teacherId, values]) => {
-        const avg =
-          values.reduce((sum, value) => sum + value, 0) / values.length;
+        const avg = values.reduce((a, b) => a + b, 0) / values.length;
         return prisma.teacher.update({
           where: { id: +teacherId },
           data: { avg },

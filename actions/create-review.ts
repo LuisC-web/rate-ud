@@ -5,11 +5,13 @@ import { Review } from "@prisma/client";
 export const createReview = async (
   data: Omit<Review, "id">,
   score: number,
-  email: string,
   code: string,
 ) => {
   try {
-    const verifyCode = await prisma.code.findUnique({ where: { email } });
+    const verifyCode = await prisma.code.findUnique({
+      where: { email: data.email },
+    });
+
     if (!verifyCode) {
       return {
         data: [],
@@ -28,20 +30,27 @@ export const createReview = async (
         },
       };
     }
-    const [reviewResult] = await Promise.allSettled([
-      prisma.review.create({ data }),
-      prisma.code.delete({ where: { email } }),
-    ]);
-    if (reviewResult.status !== "fulfilled") {
+    const reviewPrevious = await prisma.review.findUnique({
+      where: {
+        email_teacherId: {
+          email: data.email,
+          teacherId: data.teacherId,
+        },
+      },
+    });
+
+    if (reviewPrevious) {
       return {
         data: [],
         error: {
           error: true,
-          message: "No se pudo crear la reseña.",
+          message: "Agregaste una referencia anteriormente",
         },
       };
     }
-    const review = reviewResult.value;
+    const review = await prisma.review.create({ data });
+    await prisma.code.delete({ where: { email: data.email } });
+
     await prisma.score.create({ data: { value: score, reviewId: review.id } });
     const scores = await prisma.score.findMany({
       where: {
