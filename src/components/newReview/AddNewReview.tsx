@@ -37,7 +37,6 @@ function AddNewReview() {
   }, []);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData.content);
 
     if (
       !formData.user.length ||
@@ -51,8 +50,11 @@ function AddNewReview() {
       user: formData.user,
       teacherId: +formData.teacherId,
       content: formData.content,
+      email,
     };
-    const response = await createReview(newData, formData.score, email, code);
+    console.log("Creando referencia");
+
+    const response = await createReview(newData, formData.score, code);
     if (response.error.error) {
       toast.error(response.error.message);
       return;
@@ -94,7 +96,7 @@ function AddNewReview() {
               <option value="">Seleccione un profesor</option>
               {teachers.map((teacher) => (
                 <option key={teacher.id} value={teacher.id}>
-                  {teacher.name}
+                  {teacher.name}-{teacher.career.name}
                 </option>
               ))}
             </select>
