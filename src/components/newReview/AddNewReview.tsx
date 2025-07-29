@@ -52,8 +52,6 @@ function AddNewReview() {
       content: formData.content,
       email,
     };
-    console.log("Creando referencia");
-
     const response = await createReview(newData, formData.score, code);
     if (response.error.error) {
       toast.error(response.error.message);
