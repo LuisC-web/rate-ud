@@ -1,12 +1,16 @@
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { sendVerificationCode, verifyCode } from "../../../actions/api";
-type VerifyEmailProps = { setVerified: () => void };
-function VerifyEmail({ setVerified }: VerifyEmailProps) {
+import { useEmailVerificationStore } from "@/store/useStoreEmail";
+function VerifyEmail() {
   const [sendCode, setSendCode] = useState(false);
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
-
+  const {
+    setVerified,
+    setCode: setCodeState,
+    setEmail: setEamilState,
+  } = useEmailVerificationStore();
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email.length && !sendCode) {
@@ -30,7 +34,13 @@ function VerifyEmail({ setVerified }: VerifyEmailProps) {
         return;
       }
       toast.success("Codigo verificado con exito");
-      setVerified();
+      setCodeState(code);
+      console.log(email);
+
+      setEamilState(email);
+      setCode("");
+      setEmail("");
+      setVerified(true);
     }
   };
   return (
@@ -45,7 +55,7 @@ function VerifyEmail({ setVerified }: VerifyEmailProps) {
             <label htmlFor="email">Correo</label>
             <input
               name="email"
-              className="bg-primary-light border-primary w-full rounded-2xl border-2 px-5 py-2 focus:outline-0"
+              className="bg-primary-light border-primary w-full rounded-2xl border-2 px-5 py-2 focus:outline-0 disabled:cursor-not-allowed disabled:opacity-80"
               placeholder="example@udistrital.edu.co"
               disabled={sendCode}
               onChange={(e) => setEmail(e.target.value)}

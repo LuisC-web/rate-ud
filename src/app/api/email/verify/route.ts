@@ -42,9 +42,6 @@ export async function POST(req: Request) {
         { status: 410 },
       );
     }
-
-    await prisma.code.delete({ where: { email } });
-
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err: unknown) {
     console.error(err);

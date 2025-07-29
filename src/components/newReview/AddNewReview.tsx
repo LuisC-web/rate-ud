@@ -7,6 +7,7 @@ import { getTeachers } from "../../../actions/get-teacher";
 import { createReview } from "../../../actions/create-review";
 import { Review } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import { useEmailVerificationStore } from "@/store/useStoreEmail";
 
 function AddNewReview() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -18,6 +19,7 @@ function AddNewReview() {
     content: "",
     teacherId: "",
   });
+  const { email, code, reset } = useEmailVerificationStore();
   useEffect(() => {
     const getTeacherMountComponent = async () => {
       setLoading(true);
@@ -50,22 +52,34 @@ function AddNewReview() {
       teacherId: +formData.teacherId,
       content: formData.content,
     };
-    const response = await createReview(newData, formData.score);
+    const response = await createReview(newData, formData.score, email, code);
     if (response.error.error) {
       toast.error(response.error.message);
       return;
     }
-    toast.success("Review creada con exito");
+    toast.success("Refenerencia creada");
+    reset();
     router.push("/");
   };
   return (
     <div className="flex h-full w-screen items-center justify-center">
-      <div className="border-primary mx-auto w-full max-w-xl rounded-xl border-2 p-5 px-10">
+      <div className="border-primary mx-auto w-full max-w-xl rounded-xl border-2 p-5 md:px-10">
         <h1 className="mb-3 text-2xl">Crea una reseña</h1>
         <form
           className="flex flex-col space-y-3"
           onSubmit={(e) => handleSubmit(e)}
         >
+          <div className="flex flex-col space-y-2">
+            <label htmlFor="email">Correo</label>
+            <input
+              name="email"
+              className="bg-primary-light border-primary w-full rounded-2xl border-2 px-5 py-2 focus:outline-0 disabled:cursor-not-allowed disabled:opacity-80"
+              placeholder="example@udistrital.edu.co"
+              disabled={true}
+              defaultValue={email}
+              type="email"
+            />
+          </div>
           <div className="flex flex-col space-y-2">
             <label htmlFor="select-teacher">Seleccione un profesor</label>
             <select
@@ -114,7 +128,7 @@ function AddNewReview() {
               onChange={(e) =>
                 setFormData({ ...formData, content: e.target.value })
               }
-              className="placeholder-primary-light border-primary h-40 resize-none overflow-y-auto rounded-xl border-2 p-7 focus:outline-0 md:h-64"
+              className="placeholder-primary-light border-primary h-40 resize-none overflow-y-auto rounded-xl border-2 p-7 focus:outline-0 md:h-50"
             ></textarea>
           </div>
           <input
