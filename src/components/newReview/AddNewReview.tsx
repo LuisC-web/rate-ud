@@ -10,19 +10,19 @@ import { useEmailVerificationStore } from "@/store/useStoreEmail";
 import ProfessorDropdown from "../ui/ProfessorDropdown";
 import { getCareers } from "../../../actions/get-career";
 import { getTeachersById } from "../../../actions/get-teacher-by-careerId";
-
+const FORM_DATA_INITIAL_STATE = {
+  user: "",
+  score: 0,
+  content: "",
+  teacherId: "",
+  careerId: "",
+};
 function AddNewReview() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [careers, setCareers] = useState<Career[]>([]);
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(true);
-  const [formData, setFormData] = useState({
-    user: "",
-    score: 0,
-    content: "",
-    teacherId: "",
-    careerId: "",
-  });
+  const [formData, setFormData] = useState(FORM_DATA_INITIAL_STATE);
   const { email, code, reset } = useEmailVerificationStore();
   useEffect(() => {
     const getTeacherMountComponent = async () => {
@@ -163,7 +163,17 @@ function AddNewReview() {
             type="submit"
             disabled={loading}
             className="bg-primary-light text-primary border-primary active:bg-primary-light/80 hover:bg-primary-light/80 cursor-pointer rounded-2xl border-2 p-3"
-            value="Enviar reseña"
+            value="Enviar referencia"
+          />
+          <input
+            type="button"
+            disabled={loading}
+            className="bg-error border-secondary/80 active:bg-error/80 hover:bg-error/80 text-secondary cursor-pointer rounded-2xl border-2 p-3"
+            value="Cancelar referencia"
+            onClick={async () => {
+              reset();
+              setFormData(FORM_DATA_INITIAL_STATE);
+            }}
           />
         </form>
       </div>
