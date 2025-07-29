@@ -36,7 +36,7 @@ function Header() {
               pathname === "/new/review" ? "text-primary-light" : ""
             }`}
           >
-            Sube una reseña
+            Sube una referencia
           </Link>
           <Link
             href="/top"
@@ -81,7 +81,7 @@ function Header() {
             pathname === "/new/review" ? "text-primary-light" : ""
           }`}
         >
-          Sube una reseña
+          Sube una referencia
         </Link>
         <Link
           href="/top"

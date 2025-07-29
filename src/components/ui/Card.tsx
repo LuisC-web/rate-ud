@@ -40,7 +40,7 @@ function Card({
       <div
         className={`w-full rounded-xl p-4 text-white ${feedback ? "" : "hidden"}`}
       >
-        <h1>Algunos comentarios</h1>
+        <h1>Algunas referencias</h1>
         {comments?.map((comment, index) => (
           <p className="flex items-center gap-2 text-base" key={index}>
             {comment.autor}:
