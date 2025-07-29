@@ -11,42 +11,39 @@ function Header() {
   return (
     <nav className="bg-primary text-secondary flex w-screen items-center justify-center py-6 text-xl transition-all md:px-10">
       <div className="hidden w-full justify-between md:flex">
-        <div className="flex gap-3">
-          <Link
-            href="/"
-            className={`hover:text-primary-light cursor-pointer ${
-              pathname === "/" ? "text-primary-light" : ""
-            }`}
-          >
-            Busca un profe
-          </Link>
-          <Link
-            href="/new/teacher"
-            className={`hover:text-primary-light cursor-pointer ${
-              pathname === "/new/teacher" ? "text-primary-light" : ""
-            }`}
-          >
-            Crea un profe
-          </Link>
-        </div>
-        <div className="flex gap-3">
-          <Link
-            href="/new/review"
-            className={`hover:text-primary-light cursor-pointer ${
-              pathname === "/new/review" ? "text-primary-light" : ""
-            }`}
-          >
-            Sube una referencia
-          </Link>
-          <Link
-            href="/top"
-            className={`hover:text-primary-light cursor-pointer ${
-              pathname === "/top" ? "text-primary-light" : ""
-            }`}
-          >
-            Top profes
-          </Link>
-        </div>
+        <Link
+          href="/"
+          className={`hover:text-primary-light cursor-pointer ${
+            pathname === "/" ? "text-primary-light" : ""
+          }`}
+        >
+          Busca un profe
+        </Link>
+        <Link
+          href="/new/teacher"
+          className={`hover:text-primary-light cursor-pointer ${
+            pathname === "/new/teacher" ? "text-primary-light" : ""
+          }`}
+        >
+          Crea un profe
+        </Link>
+
+        <Link
+          href="/new/review"
+          className={`hover:text-primary-light cursor-pointer ${
+            pathname === "/new/review" ? "text-primary-light" : ""
+          }`}
+        >
+          Sube una referencia
+        </Link>
+        <Link
+          href="/top"
+          className={`hover:text-primary-light cursor-pointer ${
+            pathname === "/top" ? "text-primary-light" : ""
+          }`}
+        >
+          Top profes
+        </Link>
       </div>
       <div className="mx-auto block w-full md:hidden">
         <MenuIcon

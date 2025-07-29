@@ -5,29 +5,38 @@ import { ReviewsType } from "@/type";
 
 export const getReviews = async (id: number) => {
   try {
-    const reviews: ReviewsType = await prisma.teacher.findUniqueOrThrow({
+    const teacher = await prisma.teacher.findUnique({
       where: { id },
       include: {
         reviews: {
-          include: {
-            score: true,
-          },
+          include: { score: true },
         },
         career: true,
       },
     });
 
+    if (!teacher) {
+      return {
+        data: null,
+        error: {
+          error: true,
+          message: `No se encontró el profesor con id ${id}`,
+        },
+      };
+    }
+
     return {
-      data: reviews,
+      data: teacher,
       error: { error: false, message: "" },
     };
   } catch (error) {
     console.error("Error al obtener reviews:", error);
-
-    if (error instanceof Error) {
-      throw new Error(`No se encontró el profesor con id ${id}`);
-    }
-
-    throw new Error("Ocurrió un error inesperado al obtener las reviews.");
+    return {
+      data: null,
+      error: {
+        error: true,
+        message: "Error inesperado al obtener las reviews.",
+      },
+    };
   }
 };
