@@ -13,7 +13,7 @@ export const getTeachers = async (
             OR: [{ name: { contains: search, mode: "insensitive" } }],
           }
         : undefined,
-      include: { score: true, career: true },
+      include: { reviews: true, career: true },
       ...(limit ? { take: limit } : {}),
       ...(skip ? { skip } : {}),
     });
