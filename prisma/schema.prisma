@@ -6,22 +6,35 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model Teacher {
-  id Int @id @default(autoincrement())
-  name String
-  score Score[]
-  careerId Int 
-  avg Float @default(0)
-  career Career @relation(fields: [careerId], references: [id])
+  id       Int       @id @default(autoincrement())
+  name     String
+  reviews  Review[]
+  careerId Int
+  avg      Float     @default(0)
+  career   Career    @relation(fields: [careerId], references: [id])
 }
+
 model Career {
-  id Int @id @default(autoincrement())
-  name String
-  teachers  Teacher[]  
+  id       Int       @id @default(autoincrement())
+  name     String
+  teachers Teacher[]
 }
+
+model Review {
+  id        Int     @id @default(autoincrement())
+  review    String
+  user      String
+  teacherId Int
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+  score     Score?  @relation(fields: [scoreId], references: [id])
+  scoreId   Int?    @unique
+}
+
+
 model Score {
-  id Int @id @default(autoincrement())
-  value Int
-  teacherId Int 
-  teacher Teacher @relation(fields: [teacherId], references: [id])
+  id     Int     @id @default(autoincrement())
+  value  Int
+  review Review?
 }
