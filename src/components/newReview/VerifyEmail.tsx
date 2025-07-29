@@ -1,18 +1,36 @@
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
-
-function VerifyEmail() {
+import { sendVerificationCode, verifyCode } from "../../../actions/api";
+type VerifyEmailProps = { setVerified: () => void };
+function VerifyEmail({ setVerified }: VerifyEmailProps) {
   const [sendCode, setSendCode] = useState(false);
   const [email, setEmail] = useState("");
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const [code, setCode] = useState("");
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email.length && !sendCode) {
       toast.error("El correo no es valido");
       return;
     }
     if (!sendCode) {
+      const response = await sendVerificationCode(email);
+      if (response.error.error) {
+        toast.error(response.error.message);
+        return;
+      }
       toast.success("Codigo enviado con exito al correo");
       setSendCode(true);
+      return;
+    }
+    if (sendCode) {
+      const response = await verifyCode(email, code);
+      if (response.error.error) {
+        toast.error(response.error.message);
+        return;
+      }
+      toast.success("Codigo verificado con exito");
+      setVerified();
     }
   };
   return (
@@ -37,11 +55,13 @@ function VerifyEmail() {
           </div>
           {sendCode && (
             <div className="flex flex-col space-y-2">
-              <label htmlFor="select-career">Codigo:</label>
+              <label htmlFor="coder">Codigo:</label>
               <input
-                name="email"
+                name="code"
                 className="bg-primary-light border-primary w-full rounded-2xl border-2 px-5 py-2 focus:outline-0"
-                defaultValue=""
+                type="number"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
               />
             </div>
           )}

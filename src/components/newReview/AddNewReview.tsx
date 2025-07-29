@@ -16,21 +16,14 @@ function AddNewReview() {
     const getTeacherMountComponent = async () => {
       setLoading(true);
       const dataTeachers = await getTeachers();
-      const dataCareers = await getCareers();
       if (dataTeachers.error.error) {
         toast.error(dataTeachers.error.message);
         setTeachers([]);
         setLoading(false);
         return;
       }
-      if (dataCareers.error.error) {
-        toast.error(dataCareers.error.message);
-        setCareers([]);
-        setLoading(false);
-        return;
-      }
+
       setTeachers(dataTeachers.data);
-      setCareers(dataCareers.data);
       setLoading(false);
     };
     getTeacherMountComponent();

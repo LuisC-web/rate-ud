@@ -23,18 +23,25 @@ model Career {
 }
 
 model Review {
-  id        Int     @id @default(autoincrement())
-  review    String
+  id        Int      @id @default(autoincrement())
+  content    String
   user      String
   teacherId Int
-  teacher   Teacher @relation(fields: [teacherId], references: [id])
-  score     Score?  @relation(fields: [scoreId], references: [id])
-  scoreId   Int?    @unique
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  score     Score?
+}
+
+model Score {
+  id        Int     @id @default(autoincrement())
+  value     Int
+  reviewId  Int     @unique
+  review    Review  @relation(fields: [reviewId], references: [id])
 }
 
 
-model Score {
+model Code {
   id     Int     @id @default(autoincrement())
-  value  Int
-  review Review?
+  code  String
+  email String @unique
+  expiresAt DateTime
 }
