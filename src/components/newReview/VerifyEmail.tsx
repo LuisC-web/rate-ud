@@ -34,8 +34,8 @@ function VerifyEmail({ setVerified }: VerifyEmailProps) {
     }
   };
   return (
-    <div className="flex h-full items-center justify-center p-5 md:w-screen">
-      <div className="border-primary mx-auto w-full max-w-xl rounded-xl border-2 p-15">
+    <div className="flex h-full w-11/12 items-center justify-center p-0 md:w-screen md:p-5">
+      <div className="border-primary mx-auto w-full max-w-xl rounded-xl border-2 p-5 md:w-full md:p-15">
         <h1 className="mb-3 text-2xl">Verificar Email</h1>
         <form
           className="flex flex-col space-y-3"
