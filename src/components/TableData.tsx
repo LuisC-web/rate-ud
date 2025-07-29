@@ -30,7 +30,7 @@ function TableData({ teachers }: TableDataProps) {
                   href={"/" + teacher.id + "/view"}
                   className="text-primary hover:underline"
                 >
-                  Ver reseñas
+                  Ver referencias
                 </Link>
               </td>
             </tr>

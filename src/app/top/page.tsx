@@ -46,7 +46,7 @@ function TopTeacher() {
       <h1 className="text-4xl">Top de profesores</h1>
       <div className="grid h-full grid-cols-1 gap-10 md:grid-cols-2">
         <div className="border-primary rounded-2xl border-2 p-4">
-          <h1 className="text-2xl">Profesores con mejores calificaciones</h1>
+          <h1 className="text-2xl">Profesores con mejores referencias</h1>
           <div className="relative mt-4 flex w-full flex-col items-center justify-center space-y-4">
             {loading ? (
               <Spinner></Spinner>
@@ -63,7 +63,7 @@ function TopTeacher() {
           </div>
         </div>
         <div className="border-primary rounded-2xl border-2 p-4">
-          <h1 className="text-2xl">Profesores con peores calificaciones</h1>
+          <h1 className="text-2xl">Profesores con peores referencias</h1>
 
           <div className="relative mt-4 flex w-full flex-col items-center justify-center space-y-4">
             {loading ? (
