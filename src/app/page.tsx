@@ -7,7 +7,7 @@ import { getTeachers } from "../../actions/get-teacher";
 import CardData from "@/components/CardData";
 import { toast } from "react-toastify";
 
-const TEACHER_FOR_PAGE = 9;
+const TEACHER_FOR_PAGE = 20;
 
 export default function Home() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
