@@ -15,7 +15,6 @@ const RateStair: React.FC<RateStairProps> = ({
 
   const fullStars = Math.floor(rating);
   const hasHalf = rating % 1 >= 0.5;
-  const emptyStars = maxStars - fullStars - (hasHalf ? 1 : 0);
 
   // Handle star click when select is enabled
   const handleStarClick = (starValue: number): void => {
@@ -32,7 +31,6 @@ const RateStair: React.FC<RateStairProps> = ({
   return (
     <div className="flex items-center">
       {starValues.map((starValue) => {
-        const isFull = starValue <= fullStars;
         const isHalf = starValue === fullStars + 1 && hasHalf;
         const isEmpty = starValue > fullStars + (hasHalf ? 1 : 0);
 

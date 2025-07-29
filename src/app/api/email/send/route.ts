@@ -59,11 +59,17 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ success: true, code, data }), {
       status: 200,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.log(err);
 
     return new Response(
-      JSON.stringify({ error: "Error interno", detail: err.message }),
+      JSON.stringify({
+        error: "Error interno",
+        detail:
+          typeof err === "object" && err !== null && "message" in err
+            ? (err as { message: string }).message
+            : String(err),
+      }),
       { status: 500 },
     );
   }

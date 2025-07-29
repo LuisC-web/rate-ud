@@ -4,14 +4,12 @@ import { redirect } from "next/navigation";
 type CardProps = {
   teacher: Teacher;
   mobile?: boolean;
-  link?: boolean;
   feedback?: boolean;
   comments?: { autor: string; comment: string }[];
 };
 function Card({
   teacher,
   mobile = true,
-  link = true,
   feedback = false,
   comments,
 }: CardProps) {
@@ -43,8 +41,8 @@ function Card({
         className={`w-full rounded-xl p-4 text-white ${feedback ? "" : "hidden"}`}
       >
         <h1>Algunos comentarios</h1>
-        {comments?.map((comment) => (
-          <p className="flex items-center gap-2 text-base">
+        {comments?.map((comment, index) => (
+          <p className="flex items-center gap-2 text-base" key={index}>
             {comment.autor}:
             <span className="text-primary-light text-sm">
               {comment.comment}

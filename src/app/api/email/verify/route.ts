@@ -46,10 +46,16 @@ export async function POST(req: Request) {
     await prisma.code.delete({ where: { email } });
 
     return NextResponse.json({ success: true }, { status: 200 });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error(err);
     return NextResponse.json(
-      { error: "Error interno", detail: err.message },
+      {
+        error: "Error interno",
+        detail:
+          typeof err === "object" && err !== null && "message" in err
+            ? (err as { message: string }).message
+            : String(err),
+      },
       { status: 500 },
     );
   }

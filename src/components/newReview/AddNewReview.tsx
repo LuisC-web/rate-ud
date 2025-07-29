@@ -119,6 +119,7 @@ function AddNewReview() {
           </div>
           <input
             type="submit"
+            disabled={loading}
             className="bg-primary-light text-primary border-primary active:bg-primary-light/80 hover:bg-primary-light/80 cursor-pointer rounded-2xl border-2 p-3"
             value="Enviar reseña"
           />
