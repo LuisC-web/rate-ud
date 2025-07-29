@@ -19,9 +19,12 @@ export async function POST(req: Request) {
       );
     }
     const emailExist = await prisma.code.findUnique({ where: { email } });
-    console.log(emailExist);
 
     if (emailExist) {
+      const now = new Date();
+      if (emailExist.expiresAt < now) {
+        await prisma.code.delete({ where: { email } });
+      }
       return new Response(
         JSON.stringify({
           error: "El codigo ya fue enviado, espera 10 minutos y solicita otro.",

@@ -9,8 +9,8 @@ async function ViewTeacher({ params }: { params: Promise<{ id: string }> }) {
   const getReviewForTeacherId = await getReviews(id);
 
   return (
-    <div className="mt-10 px-15">
-      <h1 className="text-4xl">
+    <div className="mt-10 px-10 md:px-15">
+      <h1 className="text-2xl md:text-4xl">
         Referencia de {getReviewForTeacherId.data.name}, Carrera:
         {getReviewForTeacherId.data.career.name}
       </h1>
