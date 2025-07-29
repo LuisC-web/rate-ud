@@ -56,7 +56,6 @@ function TopTeacher() {
                   teacher={teacher}
                   key={teacher.id}
                   mobile={false}
-                  link={false}
                   feedback={true}
                 ></Card>
               ))
@@ -75,7 +74,6 @@ function TopTeacher() {
                   teacher={teacher}
                   key={teacher.id}
                   mobile={false}
-                  link={false}
                   feedback={true}
                 ></Card>
               ))
