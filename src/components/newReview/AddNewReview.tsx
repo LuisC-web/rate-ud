@@ -110,7 +110,7 @@ function AddNewReview() {
                 setFormData({ ...formData, careerId: e.target.value })
               }
             >
-              <option value="">Seleccione un profesor</option>
+              <option value="">Seleccione una carrera</option>
               {careers.map((career) => (
                 <option key={career.id} value={career.id}>
                   {career.name}
