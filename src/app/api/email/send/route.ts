@@ -1,7 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import nodemailer from "nodemailer";
 interface SendEmailRequestBody {
   email: string;
 }
@@ -33,33 +31,35 @@ export async function POST(req: Request) {
       );
     }
     const code = generateCode();
-
-    const subject = "Tu código de verificación";
-    const html = `
-      <div style="font-family: sans-serif; padding: 20px;">
-        <h2>¡Hola!</h2>
-        <p>Tu código de verificación es:</p>
-        <h1 style="background: #f4f4f4; padding: 10px; display: inline-block;">${code}</h1>
-        <p>Este código expirará en 10 minutos.</p>
-        <p>Si no solicitaste este código, ignora este mensaje.</p>
-        <br>
-        <small>Enviado por referenciasud.online</small>
-      </div>
-    `;
-    const { data, error } = await resend.emails.send({
-      from: "Notificaciones <no-reply@referenciasud.online>",
-      to: email,
-      subject,
-      html,
+    const transporter = nodemailer.createTransport({
+      host: "live.smtp.mailtrap.io",
+      port: 587,
+      auth: {
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASS,
+      },
     });
-
-    if (error) {
-      return new Response(JSON.stringify({ error }), { status: 500 });
-    }
+    const mailOptions = {
+      from: "Notificaciones<info@referenciasud.online>",
+      to: email,
+      subject: "Tu código de verificación",
+      html: `
+    <div style="font-family: sans-serif; padding: 20px;">
+      <h2>¡Hola!</h2>
+      <p>Tu código de verificación es:</p>
+      <h1 style="background: #f4f4f4; padding: 10px; display: inline-block;">${code}</h1>
+      <p>Este código expirará en 10 minutos.</p>
+      <p>Si no solicitaste este código, ignora este mensaje.</p>
+      <br>
+      <small>Enviado por referenciasud.online</small>
+    </div>
+  `,
+    };
+    await transporter.sendMail(mailOptions);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
     await prisma.code.create({ data: { email, code, expiresAt } });
 
-    return new Response(JSON.stringify({ success: true, code, data }), {
+    return new Response(JSON.stringify({ success: true, code }), {
       status: 200,
     });
   } catch (err: unknown) {
