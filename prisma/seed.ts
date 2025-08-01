@@ -1,8 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { teachers } from "./data/teachers";
-import { scores } from "./data/score";
 import { careers } from "./data/careers";
-import { reviews } from "./data/reviews";
 
 const prisma = new PrismaClient();
 
@@ -20,64 +18,13 @@ const seed = async () => {
     );
 
     // Insert teachers
-    const createdTeachers = await prisma.$transaction(
+    await prisma.$transaction(
       teachers.map((teacher) => {
-        const randomCareer =
-          createdCareers[Math.floor(Math.random() * createdCareers.length)];
+        const randomCareer = createdCareers.filter(
+          (career) => career.id === teacher.careerId,
+        );
         return prisma.teacher.create({
-          data: { name: teacher.name, careerId: randomCareer.id },
-        });
-      }),
-    );
-
-    // Insert reviews with unique email-teacher combinations
-    const createdReviews = await prisma.$transaction(
-      Array.from({ length: scores.length }).map((_, i) => {
-        const review = reviews[i % reviews.length];
-        const teacherId = createdTeachers[i % createdTeachers.length].id;
-
-        return prisma.review.create({
-          data: {
-            content: review.content,
-            user: `${review.user} ${Math.floor(i / reviews.length) + 1}`, // Make user unique
-            email: `${review.email.split("@")[0]}_${i}@${review.email.split("@")[1]}`, // Make email unique
-            teacherId: teacherId,
-          },
-        });
-      }),
-    );
-
-    // Initialize teacherScoresMap properly
-    const teacherScoresMap: Record<number, number[]> = {};
-    createdReviews.forEach((review) => {
-      if (!teacherScoresMap[review.teacherId]) {
-        teacherScoresMap[review.teacherId] = [];
-      }
-    });
-
-    // Insert scores
-    await prisma.$transaction(
-      createdReviews.map((review, i) => {
-        const value = scores[i % scores.length].value;
-
-        teacherScoresMap[review.teacherId].push(value);
-
-        return prisma.score.create({
-          data: {
-            value,
-            reviewId: review.id,
-          },
-        });
-      }),
-    );
-
-    // Update teacher average scores
-    await prisma.$transaction(
-      Object.entries(teacherScoresMap).map(([teacherId, values]) => {
-        const avg = values.reduce((a, b) => a + b, 0) / values.length;
-        return prisma.teacher.update({
-          where: { id: +teacherId },
-          data: { avg },
+          data: { name: teacher.name, careerId: randomCareer[0].id },
         });
       }),
     );
